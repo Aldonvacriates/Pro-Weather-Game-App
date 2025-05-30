@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Weather & Game App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-logo">Aldo Website</div>
+        <ul class="nav-links">
+            <li><a href="#" data-section="weather" class="active-nav-link">Weather</a></li>
+            <li><a href="#" data-section="game">TempGuess Game</a></li>
+        </ul>
+    </nav>
+
+    <main class="content-area">
+        <section id="weather-section" class="content-section active-section">
+            <h2 class="section-title">Current Weather</h2>
+            <form class="weatherForm">
+                <input type="text" class="app-input" id="cityInputWeather" placeholder="Enter city name" />
+                <button type="submit" class="app-button">Get Weather</button>
+            </form>
+            <div class="card weather-card" style="display: none">
+                <!-- Weather content will be dynamically inserted by JavaScript -->
+            </div>
+        </section>
+
+        <section id="game-section" class="content-section">
+            <div class="game-container card">
+                <h2 class="section-title">Guess the City's Temperature!</h2>
+                <p class="game-instructions">I've picked a secret city. Use the clues below to guess its current temperature in Celsius (°C). You have 5 tries.</p>
+                
+                <div id="gameCluesArea" class="game-clues">
+                    <p><strong>Weather:</strong> <span id="clueWeatherDesc">-</span></p>
+                    <p><strong>Icon:</strong> <img id="clueWeatherIcon" src="" alt="Weather Icon" style="display:none; vertical-align: middle; width: 50px; height: 50px;"></p>
+                    <p><strong>Humidity:</strong> <span id="clueHumidity">-</span>%</p>
+                    <p><strong>Wind:</strong> <span id="clueWind">-</span> km/h</p>
+                    <p><strong>Country:</strong> <span id="clueCountry">-</span></p>
+                </div>
+                
+                <div class="game-input-area">
+                    <input type="number" id="tempGuessInput" class="app-input" placeholder="Temp (°C)">
+                    <button id="tempGuessButton" class="app-button game-button">Guess</button>
+                </div>
+                
+                <p id="gameFeedback" class="game-feedback-message"></p>
+                <p id="gameAttemptsLeft" class="game-info-message">Attempts left: 5</p>
+                <div id="gameAnswerArea" class="game-answer" style="display: none;">
+                    <p>The city was <strong id="answerCityName">-</strong>.</p>
+                    <p>The actual temperature was <strong id="answerActualTemp">-</strong>°C.</p>
+                </div>
+                <button id="newTempGameButton" class="app-button game-button" style="display: none;">Play Again</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="index.js"></script>
+</body>
+</html>
