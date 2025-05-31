@@ -5,7 +5,7 @@ AppSuite is a dynamic web application that combines a real-time weather informat
 **Live Demo:** https://aldonvacriates.github.io/Pro-Weather-Game-App/
 
 ![AppSuite Screenshot](images/weather.png)
-![AppSuite Screenshot](images/weather_game.png)
+![Game Screenshot](images/weather-game.png)
 
 ## Features
 
