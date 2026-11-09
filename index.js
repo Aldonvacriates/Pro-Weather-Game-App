@@ -1,5 +1,6 @@
 // --- Common Elements & API Key ---
-const apiKey = "52da096ed7ec999aaed4554e8d24fd0f"; // Keep your API key secret!
+// Free-tier OpenWeatherMap key, intentionally client-side for the static GitHub Pages demo; anyone can read it in the browser, so swap in your own key when running locally.
+const apiKey = "52da096ed7ec999aaed4554e8d24fd0f";
 
 // --- Navigation ---
 const navLinks = document.querySelectorAll(".nav-links a");
