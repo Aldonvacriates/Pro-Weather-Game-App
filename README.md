@@ -1,126 +1,88 @@
-# AppSuite: Weather & TempGuess Game
+# Pro Weather & Game App
 
-AppSuite is a dynamic web application that combines a real-time weather information service with an engaging "Guess the Temperature" game. Users can quickly check detailed weather conditions for any city or test their meteorological intuition by guessing a secret city's temperature based on clues.
+A small vanilla JavaScript web app with two tabs: a current-weather lookup for any city, and "TempGuess", a game where you guess a secret city's temperature from weather clues. Both use the OpenWeatherMap API.
 
-**Live Demo:** https://aldonvacriates.github.io/Pro-Weather-Game-App/
+Early bootcamp exercise, built in May 2025. It is a single static page with no build step, framework or tests.
 
-![AppSuite Screenshot](images/weather.png)
-![Game Screenshot](images/weather_game.png)
+**Live demo:** https://aldonvacriates.github.io/Pro-Weather-Game-App/
+
+![Weather lookup showing current conditions for a city](images/weather.png)
+![TempGuess game showing weather clues for a secret city](images/weather_game.png)
 
 ## Features
 
-### ☀️ Weather App
-*   **City Search:** Enter any city name to get its current weather.
-*   **Detailed Information:** Displays:
-    *   City name and country
-    *   Current temperature (in Celsius & Fahrenheit)
-    *   "Feels like" temperature
-    *   Weather description and icon
-    *   Humidity percentage
-    *   Wind speed and direction
-    *   Min/Max temperatures for the day
-    *   Sunrise and sunset times (local to the city)
-    *   Atmospheric pressure
-    *   Visibility
-    *   Cloudiness
-*   **Error Handling:** Provides user-friendly messages for invalid city names or API issues.
-*   **Responsive Design:** Adapts to various screen sizes for a good user experience on desktop and mobile.
+### Weather lookup
 
-### 🌡️ TempGuess Game
-*   **Secret City:** The game randomly selects a city from a predefined list.
-*   **Clues Provided:** Users get clues about the secret city:
-    *   General weather description (e.g., "scattered clouds")
-    *   Weather icon
-    *   Humidity
-    *   Wind speed
-    *   Country
-*   **Guess the Temperature:** Players try to guess the current temperature (in Celsius) of the secret city.
-*   **Multiple Attempts:** Users have a limited number of attempts (e.g., 5).
-*   **Feedback:** Provides hints like "Too high," "Too low," "Very close," "Spot on!"
-*   **Reveal Answer:** After the game, the secret city's name and actual temperature are revealed.
-*   **Play Again:** Option to start a new game easily.
+- Search any city by name and see its current conditions.
+- Shows city and country, temperature in Celsius (plus a Fahrenheit tile), "feels like", description and icon, humidity, wind speed (km/h) and compass direction, min/max temperature, sunrise and sunset in the city's local time, pressure, visibility and cloudiness.
+- Specific error messages for an unknown city (404) or a rejected API key (401), and a generic message for other API errors.
+- Layout adjusts for narrow screens via media queries at 768px and 600px in `styles.css`.
 
+### TempGuess game
 
-## Tech Stack
+- Picks a random city from a hardcoded list of 20 world cities.
+- Shows clues: weather description and icon, humidity, wind speed and country code.
+- You get 5 guesses at the temperature in Celsius. Feedback is "Spot on!" for an exact match (to one decimal), "Very close!" within 1 °C, "Getting warmer..." within 3 °C, and "Too high" / "Too low" otherwise.
+- When the game ends, the city name and actual temperature are revealed, with a Play Again button.
 
-*   **HTML5:** For the structure and content of the application.
-*   **CSS3:** For styling, layout (including Flexbox and Grid), and responsiveness.
-*   **Vanilla JavaScript (ES6+):** For all dynamic behavior, API interaction, and game logic.
-*   **OpenWeatherMap API:** Used to fetch live weather data.
+## Tech stack
 
-## Setup and Usage
+- HTML5, CSS3 (Flexbox and CSS Grid)
+- Vanilla JavaScript (ES6+, `fetch` with `async`/`await`)
+- [OpenWeatherMap Current Weather API](https://openweathermap.org/current)
+- Hosted on GitHub Pages
 
-1.  **Clone the repository:**
-    ```bash
-    git clone git@github.com:Aldonvacriates/Pro-Weather-Game-App.git
-    cd your-repository-name
-    ```
-2.  **Get an API Key:**
-    *   Sign up at [OpenWeatherMap](https://openweathermap.org/appid) to get a free API key.
-3.  **Configure API Key:**
-    *   Open the `index.js` file.
-    *   Find the line: `const apiKey = "YOUR_API_KEY_HERE";`
-    *   Replace `"YOUR_API_KEY_HERE"` with your actual OpenWeatherMap API key.
-    ```javascript
-    // Example in index.js
-    const apiKey = "52da096ed7ec999aaed4554e8d24fd0f"; // Replace with your key!
-    ```
-4.  **Open in Browser:**
-    *   Simply open the `index.html` file in your web browser.
+## How it works
 
-## File Structure
+All logic lives in `index.js`.
 
-.<br>
-├── index.html # Main HTML structure <br>
-├── styles.css # All CSS styles<br>
-├── index.js # JavaScript logic for weather app and game<br>
-└── README.md # This file<br>
+- **One API helper for both features.** `getWeatherData(city)` calls the `/data/2.5/weather` endpoint with `units=metric` and turns HTTP 404 and 401 responses into readable errors. The weather tab and the game both call it.
+- **Local sunrise and sunset times.** The API returns UTC timestamps plus the city's `timezone` offset in seconds. `formatTime` adds the offset and reads the result with `getUTCHours` / `getUTCMinutes`, so times show in the city's local time rather than the viewer's.
+- **DOM built with `createElement` and `textContent`.** The weather card is assembled node by node instead of from an HTML string, so API text is never parsed as HTML.
+- **Lazy game start.** The game only fetches a city the first time you open its tab (`setActiveSection` calls `startTempGuessGame`), so the weather tab does not spend an API call on it. Game state (target temperature, attempts left) is kept in module-level variables.
 
-*(You can add a `screenshots/` directory if you have multiple screenshots)*
+## Getting started
 
-## How It Works
+Prerequisites: a modern browser and a free OpenWeatherMap API key.
 
-### Weather App
-The weather app takes a city name input by the user. On submission, it makes an asynchronous `fetch` request to the OpenWeatherMap API. The JSON response is then parsed, and the relevant weather data is dynamically inserted into the HTML structure of the "weather card."
+1. Clone the repository:
 
-### TempGuess Game
-The game initializes by randomly selecting a city from a predefined list and fetching its weather data (without revealing the city name or temperature to the user). Clues derived from this data are displayed. The user inputs their temperature guess. JavaScript logic compares the guess to the actual temperature, provides feedback, and manages the game state (attempts, win/loss conditions).
+   ```bash
+   git clone https://github.com/Aldonvacriates/Pro-Weather-Game-App.git
+   cd Pro-Weather-Game-App
+   ```
 
-## Future Enhancements 
+2. Get your own API key: sign up at [OpenWeatherMap](https://openweathermap.org/appid), then copy a key from the [API keys page](https://home.openweathermap.org/api_keys).
 
-*   [ ] Add a 5-day forecast feature to the weather app.
-*   [ ] Implement a unit toggle (Celsius/Fahrenheit) for user preference.
-*   [ ] Allow users to save favorite cities.
-*   [ ] Expand the list of cities for the TempGuess game or fetch random cities via a different API.
-*   [ ] Add more visual feedback or animations.
-*   [ ] Implement local storage to remember user preferences or game state.
+3. Open `index.js` and replace the value of `apiKey` near the top with your key:
 
-## Contributing 
+   ```javascript
+   const apiKey = "YOUR_OPENWEATHERMAP_API_KEY";
+   ```
 
-Contributions are welcome! If you have suggestions for improvements or find any bugs, please feel free to open an issue or submit a pull request.
+   There is no `.env` file or build step. This is a static page, so the key is sent from the browser and is visible to anyone using it. Only use a free-tier key here.
 
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
+4. Open `index.html` in your browser, or serve the folder with any static file server.
 
-## License 
+There are no automated tests.
 
-Distributed under the MIT License. See `LICENSE` file for more information.
-*(If you choose to add a license, create a `LICENSE` file in your repo with the MIT License text or another license of your choice.)*
+## Project structure
 
-## Acknowledgements
+```
+.
+├── index.html     # Page markup: navbar, weather section, game section
+├── index.js       # API calls, weather card rendering, game logic
+├── styles.css     # Layout, cards and responsive breakpoints
+└── images/        # Screenshots used in this README
+```
 
-*   [OpenWeatherMap](https://openweathermap.org/) for providing the weather API.
-*   [Aldo Herrera](https://github.com/Aldonvacriates) - Project Author
+## What I'd improve next
 
----
+- Move the API call behind a small serverless proxy so the key is not shipped to the browser.
+- Escape the city name with `encodeURIComponent` before building the request URL.
+- Split `index.js` into modules (API, weather view, game) and replace the global game state with a small state object.
+- Add unit tests for the pure helpers (`formatTime`, `getWindDirection`) and the guess-feedback logic.
 
-**Key Changes from the Previous README:**
+## Credits
 
-*   Removed any direct mention of "custom color palette" or specific color descriptions in the feature list or general description.
-*   Added "Responsive Design" as a general feature point for the Weather App, which is a good UI aspect to highlight.
-*   Added "Implement local storage..." as a potential future enhancement, which is a common next step for web apps.
-
-This version is more focused on the functionality and technology, making it broadly applicable. Remember to fill in the placeholders as before!
+Weather data and icons from [OpenWeatherMap](https://openweathermap.org/).
