@@ -39,7 +39,7 @@ All logic lives in `index.js`.
 - **One API helper for both features.** `getWeatherData(city)` calls the `/data/2.5/weather` endpoint with `units=metric` and turns HTTP 404 and 401 responses into readable errors. The weather tab and the game both call it.
 - **Local sunrise and sunset times.** The API returns UTC timestamps plus the city's `timezone` offset in seconds. `formatTime` adds the offset and reads the result with `getUTCHours` / `getUTCMinutes`, so times show in the city's local time rather than the viewer's.
 - **DOM built with `createElement` and `textContent`.** The weather card is assembled node by node instead of from an HTML string, so API text is never parsed as HTML.
-- **Lazy game start.** The game only fetches a city the first time you open its tab (`setActiveSection` calls `startTempGuessGame`), so the weather tab does not spend an API call on it. Game state (target temperature, attempts left) is kept in module-level variables.
+- **Lazy game start.** The game fetches a city only when you open its tab and no round is in progress (`setActiveSection` calls `startTempGuessGame`), so loading the weather tab does not spend an API call on it. Game state (target temperature, attempts left) is kept in top-level (global) variables.
 
 ## Getting started
 
@@ -70,6 +70,7 @@ There are no automated tests.
 
 ```
 .
+├── README.md
 ├── index.html     # Page markup: navbar, weather section, game section
 ├── index.js       # API calls, weather card rendering, game logic
 ├── styles.css     # Layout, cards and responsive breakpoints
